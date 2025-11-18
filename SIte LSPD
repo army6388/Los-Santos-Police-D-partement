@@ -1,82 +1,111 @@
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Santos Police Department</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
 
-export default function LSPDWebsite() {
-  const [matricule, setMatricule] = useState("");
-  const [defcon, setDefcon] = useState("5");
+  <h1 class="text-4xl font-bold text-center mb-6">Los Santos Police Department</h1>
 
+  <!-- Admin login -->
+  <div id="loginDiv" class="max-w-md mx-auto bg-white p-4 rounded shadow-md">
+    <h2 class="text-2xl font-semibold mb-2">Admin Login</h2>
+    <input type="password" id="adminPass" placeholder="Mot de passe admin" class="border p-2 w-full mb-2 rounded">
+    <button onclick="login()" class="bg-blue-600 text-white p-2 rounded w-full">Connexion</button>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="adminDiv" class="hidden max-w-2xl mx-auto bg-white p-4 rounded shadow-md mb-6">
+    <h2 class="text-2xl font-semibold mb-2">Espace Administration</h2>
+    <label>DEFCON:</label>
+    <select id="defconSelect" class="border p-2 rounded w-full mb-2" onchange="updateDefcon()">
+      <option value="1">DEFCON 1</option>
+      <option value="2">DEFCON 2</option>
+      <option value="3" selected>DEFCON 3</option>
+      <option value="4">DEFCON 4</option>
+      <option value="5">DEFCON 5</option>
+    </select>
+    <h3 class="font-semibold mt-2 mb-1">Divisions</h3>
+    <div id="divisionsAdmin" class="flex flex-col gap-2"></div>
+    <button onclick="logout()" class="mt-4 bg-red-600 text-white p-2 rounded w-full">Déconnexion</button>
+  </div>
+
+  <!-- Public Info -->
+  <div id="publicDiv" class="max-w-3xl mx-auto bg-white p-4 rounded shadow-md">
+    <h2 class="text-2xl font-semibold mb-2">Informations Publiques</h2>
+    <p class="mb-2">DEFCON actuel : <span id="defconPublic" class="font-bold">3</span></p>
+    <div id="divisionsPublic" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+  </div>
+
+<script>
+  const adminPassword = "lspd123";
+  let defcon = 3;
   const divisions = [
-    "Patrol Division",
-    "Traffic Division",
-    "SWAT",
-    "Detective Bureau",
-    "Air Support Division",
-    "K9 Unit",
-    "Training Division",
-    "Internal Affairs",
-    "Highway Patrol"
+    { name: "Patrol Division", matricule: "" },
+    { name: "Traffic Division", matricule: "" },
+    { name: "SWAT", matricule: "" },
+    { name: "Detective Bureau", matricule: "" },
+    { name: "Air Support Division", matricule: "" },
+    { name: "K9 Unit", matricule: "" },
+    { name: "Training Division", matricule: "" },
+    { name: "Internal Affairs", matricule: "" },
+    { name: "Highway Patrol", matricule: "" }
   ];
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-6 flex flex-col gap-6">
-      <h1 className="text-4xl font-bold text-center">Los Santos Police Department</h1>
+  function login() {
+    const pass = document.getElementById("adminPass").value;
+    if(pass === adminPassword) {
+      document.getElementById("loginDiv").classList.add("hidden");
+      document.getElementById("adminDiv").classList.remove("hidden");
+      renderAdminDivisions();
+    } else {
+      alert("Mot de passe incorrect!");
+    }
+  }
 
-      {/* Zone administration */}
-      <Card className="p-4 max-w-2xl mx-auto">
-        <CardContent className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold">Espace Administration</h2>
-          <div className="flex flex-col gap-2">
-            <label>Matricule du responsable :</label>
-            <Input
-              placeholder="Entrez le matricule"
-              value={matricule}
-              onChange={(e) => setMatricule(e.target.value)}
-            />
-          </div>
+  function logout() {
+    document.getElementById("adminDiv").classList.add("hidden");
+    document.getElementById("loginDiv").classList.remove("hidden");
+  }
 
-          <div className="flex flex-col gap-2">
-            <label>État du DEFCON :</label>
-            <Select onValueChange={(v) => setDefcon(v)} defaultValue="5">
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="1">DEFCON 1</SelectItem>
-                <SelectItem value="2">DEFCON 2</SelectItem>
-                <SelectItem value="3">DEFCON 3</SelectItem>
-                <SelectItem value="4">DEFCON 4</SelectItem>
-                <SelectItem value="5">DEFCON 5</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+  function updateDefcon() {
+    defcon = document.getElementById("defconSelect").value;
+    document.getElementById("defconPublic").innerText = defcon;
+  }
 
-      {/* Zone publique */}
-      <Card className="p-4 max-w-2xl mx-auto">
-        <CardContent className="flex flex-col gap-4">
-          <h2 className="text-2xl font-semibold">Informations Publiques</h2>
-          <p className="text-lg">DEFCON actuel : <span className="font-bold">{defcon}</span></p>
-          <p className="text-lg">Responsable en service : <span className="font-bold">{matricule || "Aucun"}</span></p>
-        </CardContent>
-      </Card>
+  function renderAdminDivisions() {
+    const container = document.getElementById("divisionsAdmin");
+    container.innerHTML = "";
+    divisions.forEach((div, idx) => {
+      const divElem = document.createElement("div");
+      divElem.className = "flex gap-2 items-center";
+      divElem.innerHTML = `<span>${div.name}:</span><input type="text" value="${div.matricule}" oninput="updateMatricule(${idx}, this.value)" class="border p-1 rounded flex-1">`;
+      container.appendChild(divElem);
+    });
+    renderPublicDivisions();
+  }
 
-      {/* Liste des divisions */}
-      <Card className="p-4 max-w-3xl mx-auto">
-        <CardContent>
-          <h2 className="text-2xl font-semibold mb-4">Divisions du LSPD</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {divisions.map((div, idx) => (
-              <Card key={idx} className="p-4 shadow-md">
-                <CardContent className="text-center text-lg font-medium">{div}</CardContent>
-              </Card>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+  function updateMatricule(idx, value) {
+    divisions[idx].matricule = value;
+    renderPublicDivisions();
+  }
+
+  function renderPublicDivisions() {
+    const container = document.getElementById("divisionsPublic");
+    container.innerHTML = "";
+    divisions.forEach(div => {
+      const divElem = document.createElement("div");
+      divElem.className = "bg-gray-100 p-2 rounded shadow text-center";
+      divElem.innerHTML = `<div class="font-medium">${div.name}</div><div>Responsable: ${div.matricule || "Aucun"}</div>`;
+      container.appendChild(divElem);
+    });
+  }
+
+  renderPublicDivisions();
+</script>
+
+</body>
+</html>
