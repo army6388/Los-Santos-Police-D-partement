@@ -1,341 +1,82 @@
-<!--
-LSPD single-file website (HTML/CSS/JS)
-Copy-paste this file into a web host or open locally.
-Replace placeholders (LOGO_URL, GOOGLE_FORM_URL, CONTACT_EMAIL) before publishing.
-Designed to be self-contained and responsive.
--->
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Los Santos Police Department (LSPD)</title>
-  <meta name="description" content="LSPD - Protéger et servir la communauté de Los Santos">
-  <style>
-    :root{
-      --blue:#0b3d91; --dark:#071028; --muted:#6b7280; --accent:#1e90ff;
-      --card-bg: rgba(255,255,255,0.03);
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,#071028 0%, #061731 100%);color:#e6eef8;min-height:100vh}
-    .container{max-width:1100px;margin:0 auto;padding:24px}
-    header{display:flex;align-items:center;gap:18px;padding:18px 0}
-    .brand{display:flex;align-items:center;gap:14px}
-    .logo{width:64px;height:64px;border-radius:10px;overflow:hidden;background:#fff}
-    .logo img{width:100%;height:100%;object-fit:cover}
-    h1{font-size:20px;margin:0}
-    p.lead{margin:4px 0 0;color:var(--muted)}
-    nav{margin-left:auto}
-    .nav-links{display:flex;gap:12px}
-    .nav-links a{color:inherit;text-decoration:none;padding:8px 12px;border-radius:8px;font-weight:600}
-    .nav-links a:hover{background:rgba(255,255,255,0.04)}
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 
-    .hero{display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:start;margin:28px 0}
-    .card{background:var(--card-bg);padding:18px;border-radius:12px;box-shadow:0 4px 18px rgba(0,0,0,0.35)}
-    .cta{display:flex;gap:10px;flex-wrap:wrap}
-    .btn{background:var(--blue);color:white;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
-    .btn.ghost{background:transparent;border:2px solid rgba(255,255,255,0.06)}
+export default function LSPDWebsite() {
+  const [matricule, setMatricule] = useState("");
+  const [defcon, setDefcon] = useState("5");
 
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
-    .section-title{display:flex;justify-content:space-between;align-items:center}
+  const divisions = [
+    "Patrol Division",
+    "Traffic Division",
+    "SWAT",
+    "Detective Bureau",
+    "Air Support Division",
+    "K9 Unit",
+    "Training Division",
+    "Internal Affairs",
+    "Highway Patrol"
+  ];
 
-    footer{margin-top:36px;padding:20px 0;border-top:1px solid rgba(255,255,255,0.03);color:var(--muted)}
+  return (
+    <div className="min-h-screen bg-gray-100 p-6 flex flex-col gap-6">
+      <h1 className="text-4xl font-bold text-center">Los Santos Police Department</h1>
 
-    /* responsive */
-    @media (max-width:980px){
-      .hero{grid-template-columns:1fr}
-      .grid{grid-template-columns:repeat(2,1fr)}
-    }
-    @media (max-width:600px){
-      .nav-links{display:none}
-      header{gap:10px}
-      .grid{grid-template-columns:1fr}
-    }
-
-    /* small utility */
-    .muted{color:var(--muted)}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-weight:600}
-    .division{display:flex;gap:12px;align-items:flex-start}
-    .division .icon{width:52px;height:52px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-weight:800}
-    .contact-row{display:flex;gap:12px;align-items:center}
-    .small{font-size:13px}
-
-    /* form */
-    form input, form textarea, form select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-    form label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    .form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
-
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo"><img src="LOGO_URL" alt="LSPD logo"/></div>
-        <div>
-          <h1>Los Santos Police Department</h1>
-          <p class="lead">Protéger et servir la communauté de Los Santos</p>
-        </div>
-      </div>
-      <nav>
-        <div class="nav-links">
-          <a href="#home">Accueil</a>
-          <a href="#about">À propos</a>
-          <a href="#recrutement">Recrutement</a>
-          <a href="#divisions">Divisions</a>
-          <a href="#rapports">Rapports</a>
-          <a href="#contact">Contact</a>
-        </div>
-      </nav>
-    </header>
-
-    <main>
-      <section id="home" class="hero">
-        <div>
-          <div class="card">
-            <h2>Bienvenue au LSPD</h2>
-            <p class="muted">Le Los Santos Police Department travaille jour et nuit pour assurer la sécurité des citoyens. Retrouvez ici toutes les informations utiles : recrutement, divisions, rapports et contacts.</p>
-
-            <div style="margin-top:12px" class="cta">
-              <a class="btn" href="#recrutement">Rejoindre le LSPD</a>
-              <a class="btn ghost" href="#rapports">Déposer un rapport</a>
-              <a class="btn ghost" href="#contact">Contacter</a>
-            </div>
-
-            <div style="margin-top:16px">
-              <div class="section-title"><h3>Dernières nouvelles</h3><a class="small muted" href="#">Voir tout</a></div>
-              <div class="grid" style="margin-top:10px">
-                <div class="card">
-                  <strong>Patrouille renforcée à Mirror Park</strong>
-                  <p class="small muted">Augmentation des unités de jour et de nuit suite à des troubles signalés.</p>
-                </div>
-                <div class="card">
-                  <strong>Ouverture des candidatures</strong>
-                  <p class="small muted">Le LSPD recrute : formations et intégration prévues chaque mois.</p>
-                </div>
-                <div class="card">
-                  <strong>Programme communautaire</strong>
-                  <p class="small muted">Nouvelles sessions de prévention et rencontres citoyennes.</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <aside>
-          <div class="card">
-            <h3>Informations rapides</h3>
-            <p class="muted small">📞 Urgence : 911</p>
-            <p class="muted small">📍 Commissariat Central : Mission Row</p>
-            <p class="muted small">✉️ Email : <span id="email-placeholder">CONTACT_EMAIL</span></p>
-            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:10px 0">
-            <h4>Déposer un rapport</h4>
-            <p class="small muted">Utilise notre formulaire en ligne pour soumettre un rapport d'incident ou une plainte.</p>
-            <a class="btn" id="open-form" href="GOOGLE_FORM_URL" target="_blank">Ouvrir le formulaire</a>
+      {/* Zone administration */}
+      <Card className="p-4 max-w-2xl mx-auto">
+        <CardContent className="flex flex-col gap-4">
+          <h2 className="text-2xl font-semibold">Espace Administration</h2>
+          <div className="flex flex-col gap-2">
+            <label>Matricule du responsable :</label>
+            <Input
+              placeholder="Entrez le matricule"
+              value={matricule}
+              onChange={(e) => setMatricule(e.target.value)}
+            />
           </div>
 
-          <div style="margin-top:12px" class="card">
-            <h4>Horaires</h4>
-            <p class="small muted">Service 24/7 — patrouilles actives</p>
-            <div style="margin-top:8px" class="pill">Badge LSPD</div>
+          <div className="flex flex-col gap-2">
+            <label>État du DEFCON :</label>
+            <Select onValueChange={(v) => setDefcon(v)} defaultValue="5">
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">DEFCON 1</SelectItem>
+                <SelectItem value="2">DEFCON 2</SelectItem>
+                <SelectItem value="3">DEFCON 3</SelectItem>
+                <SelectItem value="4">DEFCON 4</SelectItem>
+                <SelectItem value="5">DEFCON 5</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </aside>
-      </section>
+        </CardContent>
+      </Card>
 
-      <section id="about" style="margin-top:18px">
-        <div class="card">
-          <h3>À propos</h3>
-          <p class="muted">Le LSPD veille à maintenir l'ordre public, mener des enquêtes et assurer la sécurité des citoyens. Nos valeurs : Intégrité, Discipline, Respect, Sens du devoir.</p>
+      {/* Zone publique */}
+      <Card className="p-4 max-w-2xl mx-auto">
+        <CardContent className="flex flex-col gap-4">
+          <h2 className="text-2xl font-semibold">Informations Publiques</h2>
+          <p className="text-lg">DEFCON actuel : <span className="font-bold">{defcon}</span></p>
+          <p className="text-lg">Responsable en service : <span className="font-bold">{matricule || "Aucun"}</span></p>
+        </CardContent>
+      </Card>
 
-          <div style="margin-top:12px" class="grid">
-            <div class="card">
-              <h4>Organisation</h4>
-              <p class="small muted">Chef de Police · Sous-Chef · Commandants · Sergents · Officiers</p>
-            </div>
-            <div class="card">
-              <h4>Valeurs</h4>
-              <p class="small muted">Service, Respect, Transparence</p>
-            </div>
-            <div class="card">
-              <h4>Ressources</h4>
-              <p class="small muted">Formations, véhicules, unité canine, technologies d'investigation</p>
-            </div>
+      {/* Liste des divisions */}
+      <Card className="p-4 max-w-3xl mx-auto">
+        <CardContent>
+          <h2 className="text-2xl font-semibold mb-4">Divisions du LSPD</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {divisions.map((div, idx) => (
+              <Card key={idx} className="p-4 shadow-md">
+                <CardContent className="text-center text-lg font-medium">{div}</CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
-      </section>
-
-      <section id="recrutement" style="margin-top:18px">
-        <div class="card">
-          <h3>Recrutement</h3>
-          <p class="muted">Conditions : 18+ ans, casier vierge, motivation et discipline.</p>
-
-          <div style="margin-top:12px" class="grid">
-            <div class="card">
-              <h4>Processus</h4>
-              <ol class="muted small">
-                <li>Soumission du dossier</li>
-                <li>Entretien & tests</li>
-                <li>Formation initiale</li>
-                <li>Intégration</li>
-              </ol>
-            </div>
-            <div class="card">
-              <h4>Documents requis</h4>
-              <ul class="muted small">
-                <li>Carte d'identité</li>
-                <li>Lettre de motivation</li>
-                <li>CV / Expérience RP</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h4>Candidature</h4>
-              <p class="muted small">Clique sur le bouton pour accéder au formulaire de candidature.</p>
-              <a class="btn" href="GOOGLE_FORM_URL" target="_blank">Candidater maintenant</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="divisions" style="margin-top:18px">
-        <div class="card">
-          <h3>Divisions</h3>
-          <div style="margin-top:12px" class="grid">
-            <div class="card division">
-              <div class="icon">🚓</div>
-              <div>
-                <strong>Patrouille</strong>
-                <p class="muted small">Surveillance et présence sur le terrain.</p>
-              </div>
-            </div>
-            <div class="card division">
-              <div class="icon">🕵️</div>
-              <div>
-                <strong>Investigation</strong>
-                <p class="muted small">Enquêtes criminelles et collecte de preuves.</p>
-              </div>
-            </div>
-            <div class="card division">
-              <div class="icon">🚨</div>
-              <div>
-                <strong>SWAT</strong>
-                <p class="muted small">Interventions spécialisées et incidents à haut risque.</p>
-              </div>
-            </div>
-            <div class="card division">
-              <div class="icon">🚔</div>
-              <div>
-                <strong>Traffic Unit</strong>
-                <p class="muted small">Contrôles routiers et sécurité du trafic.</p>
-              </div>
-            </div>
-            <div class="card division">
-              <div class="icon">🤝</div>
-              <div>
-                <strong>Community</strong>
-                <p class="muted small">Programmes de prévention et liaison citoyenne.</p>
-              </div>
-            </div>
-            <div class="card division">
-              <div class="icon">⚙️</div>
-              <div>
-                <strong>Support</strong>
-                <p class="muted small">Logistique, formation et administration.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="rapports" style="margin-top:18px">
-        <div class="card">
-          <h3>Rapports</h3>
-          <p class="muted">Pour signaler un incident, une arrestation ou déposer une plainte, utilise notre formulaire en ligne.</p>
-
-          <div style="margin-top:12px" class="grid">
-            <div class="card">
-              <h4>Rapport d'incident</h4>
-              <p class="muted small">Détails : date, lieu, description, témoins.</p>
-            </div>
-            <div class="card">
-              <h4>Rapport de patrouille</h4>
-              <p class="muted small">Entrées du service et actions menées.</p>
-            </div>
-            <div class="card">
-              <h4>Plainte citoyenne</h4>
-              <p class="muted small">Nous traitons chaque plainte avec sérieux.</p>
-            </div>
-          </div>
-
-          <div style="margin-top:12px">
-            <a class="btn" href="GOOGLE_FORM_URL" target="_blank">Déposer un rapport</a>
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" style="margin-top:18px">
-        <div class="card">
-          <h3>Contact</h3>
-          <p class="muted">Questions générales, informations ou assistance.</p>
-
-          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px">
-            <div style="flex:1;min-width:280px" class="card">
-              <h4>Coordonnées</h4>
-              <p class="small muted">📞 Urgence : 911<br>📍 Mission Row Commissariat<br>✉️ Email : <span id="contact-email">CONTACT_EMAIL</span></p>
-            </div>
-
-            <div style="flex:1;min-width:280px" class="card">
-              <h4>Envoyer un message</h4>
-              <form id="contact-form">
-                <label for="name">Nom</label>
-                <input id="name" required>
-                <label for="email">Email</label>
-                <input id="email" type="email" required>
-                <label for="msg">Message</label>
-                <textarea id="msg" rows="5" required></textarea>
-                <div class="form-actions"><button class="btn" type="submit">Envoyer</button></div>
-              </form>
-              <p class="small muted" id="form-result" style="display:none;margin-top:8px"></p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <footer>
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap">
-        <div class="muted small">© Los Santos Police Department — Tous droits réservés</div>
-        <div class="muted small">Conçu pour RP / Communauté</div>
-      </div>
-    </footer>
-  </div>
-
-  <script>
-    // Replace placeholders automatically if provided via URL params (handy for publishing)
-    (function(){
-      function q(name){const url = new URL(window.location.href);return url.searchParams.get(name)}
-      const logo = q('logo') || '';
-      const form = q('form') || '';
-      const email = q('email') || '';
-      if(logo) document.querySelector('.logo img').src = logo;
-      if(form) document.getElementById('open-form').href = form;
-      if(email){document.getElementById('email-placeholder').textContent = email;document.getElementById('contact-email').textContent = email}
-    })();
-
-    // Simple contact form handler (client-side): show message and instructions to admin.
-    document.getElementById('contact-form').addEventListener('submit', function(e){
-      e.preventDefault();
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const msg = document.getElementById('msg').value;
-      const result = document.getElementById('form-result');
-      // NOTE: this demo does not send emails. Replace with real endpoint or use form provider.
-      result.style.display = 'block';
-      result.textContent = 'Merci ' + name + " — ton message a été reçu localement. Remplacez le handler de ce formulaire par un Google Form, Formspree ou votre back-end pour l'envoyer réellement.";
-      this.reset();
-    });
-  </script>
-</body>
-</html>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
